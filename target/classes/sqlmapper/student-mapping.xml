@@ -1,0 +1,28 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stuData.dao.StudentDao" >
+  <resultMap id="StudentDTOMap" type="com.stuData.dao.dataobject.StudentDTO">
+	<result column="stu_no" property="stuNo" jdbcType="VARCHAR" />
+	<result column="student_id" property="studentId" jdbcType="BIGINT" />
+  </resultMap>
+  <select id="getStudentDTOListByStuNOs" resultMap="StudentDTOMap">
+    select id as studentId, stu_no as stuNo 
+    from student 
+    where class_id = #{classId,jdbcType=BIGINT}
+    and stu_no in
+    <foreach item="stuNo" index="index" collection="stuNoList" open="(" separator="," close=")">
+        #{stuNo,jdbcType=BIGINT}
+    </foreach>
+    and status = 0
+  </select>
+  
+  <select id="getStuNoExistedList" resultType="java.lang.String">
+    select stu_no
+    from student 
+    where class_id = #{classId,jdbcType=BIGINT}
+    and stu_no in
+    <foreach item="stuNo" index="index" collection="stuNoList" open="(" separator="," close=")">
+		#{stuNo,jdbcType=BIGINT}
+	</foreach>
+    and status = 0 
+  </select>
+</mapper>
